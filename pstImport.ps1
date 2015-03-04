@@ -18,8 +18,8 @@ $files = Get-ChildItem -Path ($basefolder + $mailbox) -Filter *.pst
 $counter = 0
 
 foreach ($pst in $files) {
-    $import = "New-MailboxImportRequest -FilePath $($pst.fullname) -Mailbox $mailbox -TargetRootFolder $($pst.Name)"
-    $import += " -Name $($mailbox + $counter) -BatchName MassImport -BadItemLimit $faileditems"
+    $import = "New-MailboxImportRequest -FilePath '$($pst.fullname)' -Mailbox '$mailbox' -TargetRootFolder '$($pst.Name)'"
+    $import += " -Name '$($mailbox + $counter)' -BatchName MassImport -BadItemLimit $faileditems"
     if ($archive -eq $true) {
         $import += " -IsArchive"
     }
