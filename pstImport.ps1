@@ -10,7 +10,8 @@
 
 $mailbox = "j.doe"                        # Mailbox in which the pst files will be imported
 $basefolder = "\\localhost\C`$\TEMP\"     # UNC Path to the folder where the mailbox folder lies
-$archive = True                           # Import into personal archive? False will import into the users Mailbox
+$archive = $true                           # Import into personal archive? False will import into the users Mailbox
+$faileditems = 5
 
 
 $folderpath = $basefolder + $mailbox
@@ -18,10 +19,11 @@ $files = Get-ChildItem -Path $folderpath -Filter *.pst
 $counter = 0
 
 foreach ($pst in $files) {
-    $params = "-FilePath " + $pst.fullname + " -Mailbox " + $mailbox+ " -TargetRootFolder " + $pst.Name + " -Name " + $mailbox + $counter + " -BatchName MassImport "
-    if ($archive == True) {
-        $params += "-IsArchive"
+    $import = "New-MailboxImportRequest -FilePath $($pst.fullname) -Mailbox $mailbox -TargetRootFolder $($pst.Name)"
+    $import += " -Name $($mailbox + $counter) -BatchName MassImport -BadItemLimit $faileditems"
+    if ($archive -eq $true) {
+        $import += " -IsArchive"
     }
-    & New-MailboxImportRequest $params
+    Invoke-Expression $import
     $counter++
 }
