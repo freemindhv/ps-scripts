@@ -22,6 +22,13 @@ foreach ($x in $path) {
     catch {
         Write-Debug $_.Exception.Message
     }
+    Write-Host "Lösche " ($x + "\AppData\Local\Microsoft\Windows\WebCache\")
+    try {
+        Get-Childitem ($x + "\AppData\Local\Microsoft\Windows\WebCache\") -Force | Remove-Item -Recurse -Force
+    }
+    catch {
+        Write-Debug $_.Exception.Message
+    }
     try {
         Get-Childitem ($x + "\AppData\Local\Microsoft\Windows\WER\") -Force | Remove-Item -Recurse -Force
     }
